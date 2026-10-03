@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0e2028" />
+  <meta name="description" content="Abenezer Qurtina Kitfo Hotel — Ethiopian food menu." />
+  <title>Abenezer Qurtina · አበነዘር ቁርጥና</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230e2028'/%3E%3Cpath d='M14 21h36M14 32h36M14 43h36' stroke='%23d7a64a' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%23c94b3c'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Abenezer Qurtina home">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span><strong>ABENEZER QURTINA</strong><small>Kitfo Hotel · ኪትፎ ሆቴል</small></span>
+    </a>
+    <div class="top-actions">
+      <button class="lang-toggle" id="langToggle" type="button" aria-label="Change language"><span class="active">EN</span><span>አማ</span></button>
+      <button class="outline-btn" id="ownerButton" type="button"><span>✦</span> Owner mode</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="welcome-wrap">
+      <div class="welcome-copy reveal">
+        <p class="eyebrow"><span class="dot"></span><span data-en="OPEN TODAY · FRESHLY PREPARED" data-am="ዛሬ ክፍት ነን · በፍቅር የተዘጋጀ">OPEN TODAY · FRESHLY PREPARED</span></p>
+        <h1 data-en="Welcome. Come hungry, leave happy." data-am="እንኳን ደህና መጡ። በሆድ ረሃብ ገብተው በደስታ ይውጡ።">Welcome. Come hungry,<br><em>leave happy.</em></h1>
+        <p class="welcome-text" data-en="Your table is waiting. Explore our Ethiopian favourites, made with care and served the way we love them." data-am="ጠረጴዛዎ እየጠበቀዎት ነው። በፍቅር የተዘጋጁ የኢትዮጵያ ምግቦቻችንን ይምረጡ።">Your table is waiting. Explore our Ethiopian favourites, made with care and served the way we love them.</p>
+        <div class="welcome-actions">
+          <a class="primary-btn" href="#menu"><span data-en="View today’s menu" data-am="የዛሬን ምናሌ ይመልከቱ">View today’s menu</span><b>↓</b></a>
+          <span class="service-note"><span class="pulse"></span><span data-en="Dine in · Take away" data-am="እዚህ ይመገቡ · ይዘው ይሂዱ">Dine in · Take away</span></span>
+        </div>
+      </div>
+      <div class="hero-food reveal delay-1">
+        <img src="assets/kitfo-hero.png" alt="Traditional Ethiopian kitfo, injera and woven serving tray" />
+        <div class="hero-stamp"><span>እንኳን</span><strong>ደህና<br>መጡ</strong><span>WELCOME</span></div>
+        <div class="hero-caption"><span>01</span><span data-en="THE HOUSE SPECIAL" data-am="የቤቱ ልዩ ምግብ">THE HOUSE SPECIAL</span></div>
+      </div>
+    </section>
+
+    <section class="menu-section" id="menu">
+      <div class="section-heading reveal">
+        <div><p class="eyebrow red"><span class="line"></span><span data-en="THE MENU · ምናሌ" data-am="ምናሌ · THE MENU">THE MENU · ምናሌ</span></p><h2 data-en="Choose your plate." data-am="የሚወዱትን ይምረጡ።">Choose your plate.</h2></div>
+        <p class="section-note" data-en="Prices are in Ethiopian birr · Ask us about today’s fresh options" data-am="ዋጋዎች በኢትዮጵያ ብር ናቸው · የዛሬን ትኩስ ምርጫ ይጠይቁ">Prices are in Ethiopian birr · Ask us about today’s fresh options</p>
+      </div>
+      <nav class="category-bar" aria-label="Menu categories" id="categories"></nav>
+      <div class="menu-grid" id="menuGrid"></div>
+      <div class="menu-footer"><span class="pattern-rule"></span><p data-en="Made for sharing. Made for coming back." data-am="ለመካፈል የተዘጋጀ። እንደገና ለመምጣት የሚያስደስት።">Made for sharing. Made for coming back.</p><span class="pattern-rule"></span></div>
+    </section>
+  </main>
+
+  <footer class="footer"><span>© ABENEZER QURTINA KITFO HOTEL</span><span>አበነዘር ቁርጥና ኪትፎ ሆቴል</span><span class="footer-mark">✦</span></footer>
+
+  <div class="owner-modal" id="ownerModal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-owner></div>
+    <section class="owner-panel" role="dialog" aria-modal="true" aria-labelledby="ownerTitle">
+      <button class="modal-close" data-close-owner aria-label="Close owner mode">×</button>
+      <p class="eyebrow red"><span class="line"></span>OWNER MODE</p>
+      <h2 id="ownerTitle">Quick menu edit</h2>
+      <p class="modal-copy">This demo saves edits on this device. Connect the dashboard to a shared database before publishing for daily hotel-wide updates.</p>
+      <form id="ownerForm">
+        <label>Item name <input id="editName" required /></label>
+        <label>Price (ETB) <input id="editPrice" type="number" min="0" required /></label>
+        <label>Category <select id="editCategory"></select></label>
+        <button class="primary-btn full" type="submit">Save menu item <b>✓</b></button>
+      </form>
+      <div class="owner-list" id="ownerList"></div>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="script.js"></script>
+</body>
+</html>
