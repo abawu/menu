@@ -18,3 +18,27 @@
 .hero-slides{position:absolute;inset:0;transform-style:preserve-3d;overflow:hidden}.hero-slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;pointer-events:none;transition:opacity .7s ease;transform:translateZ(28px) scale(1.04);animation:none!important}.hero-slide.active{opacity:1;animation:carouselFloat 8s ease-in-out infinite!important}.hero-dots{position:absolute;left:25px;bottom:24px;z-index:4;display:flex;gap:7px;transform:translateZ(60px)}.hero-dot{width:26px;height:4px;background:#ffffff66;border-radius:0;padding:0;transition:.25s}.hero-dot.active{width:48px;background:var(--yellow)}@keyframes carouselFloat{0%,100%{transform:translateZ(28px) scale(1.04)}50%{transform:translateZ(44px) scale(1.07)}}
 @media(max-width:650px){.hero-dots{left:18px;bottom:18px}.hero-dot{width:20px}.hero-dot.active{width:38px}}
 @media(prefers-reduced-motion:reduce){.hero-slide.active{animation:none!important}.hero-dot{transition:none!important}}
+
+/* Joyful golden hero palette */
+:root{--joy-gold:#f4c95d;--joy-honey:#ffdf7a;--joy-cream:#fff7dc;--joy-ink:#3c2814}
+.hero{background:radial-gradient(circle at 7% 16%,#fff3b833 0 4px,transparent 5px),radial-gradient(circle at 18% 82%,#fff3b82b 0 5px,transparent 6px),radial-gradient(circle at 77% 14%,#fff3b82e 0 4px,transparent 5px),linear-gradient(135deg,#d99527 0%,#f2bd4d 42%,#ffe29a 100%);color:var(--joy-ink)}
+.hero:before,.hero:after{content:'✦  ✧  ✦';position:absolute;color:#fff6c7aa;font:700 28px/1 'Space Grotesk',sans-serif;letter-spacing:22px;pointer-events:none;animation:joySparkle 6s ease-in-out infinite}
+.hero:before{right:7%;top:13%;transform:rotate(12deg)}
+.hero:after{left:7%;bottom:8%;font-size:18px;letter-spacing:15px;animation-delay:-2s}
+.hero-backdrop{border-color:#fff7cf88;box-shadow:0 0 0 90px #fff7cf2e,0 0 0 180px #fff7cf16}
+.hero .kicker,.hero .hero-stamp em,.hero .hero-side strong{color:#fff8d7}
+.hero .live-dot{background:#ff6b45;box-shadow:0 0 0 5px #ff6b4530}
+.hero h1{color:#3b2510;text-shadow:0 3px 0 #fff1ad66}
+.hero h1 i{color:#a94f23}
+.hero p{color:#5b411f}
+.hero-stamp{color:#3f2a14cc}
+.hero-media:before{background:var(--joy-honey)}
+.hero-media{box-shadow:24px 34px 0 #8d541d38,34px 44px 70px #8d541d45}
+.hero-media:hover{box-shadow:12px 20px 0 #8d541d55,28px 36px 75px #8d541d55}
+.hero-side{color:#704c20aa}
+.hero-side strong{color:#fff8d7}
+.hero-dots{filter:drop-shadow(0 2px 4px #5c361955)}
+.hero-dot{background:#fff8d777}
+.hero-dot.active{background:#fff8d7}
+@keyframes joySparkle{0%,100%{opacity:.42;transform:translateY(0) rotate(12deg) scale(1)}50%{opacity:1;transform:translateY(-9px) rotate(18deg) scale(1.08)}}
+@media(prefers-reduced-motion:reduce){.hero:before,.hero:after{animation:none!important}}
