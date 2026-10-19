@@ -1,20 +1,13 @@
-# Abenezer Qurtina Kitfo Hotel menu
+# Rome 1960 Digital Menu
 
-Fast bilingual QR-menu prototype for Abenezer Qurtina Kitfo Hotel.
+Mobile-first QR menu for Rome 1960 Specialty Kitchen & Cafe.
 
-## Current prototype
-
-- `index.html` is a static, mobile-first public menu.
-- `Owner mode` edits menu items in browser `localStorage` for demonstration.
-- Before public launch, replace the sample food names/prices with the hotel's confirmed menu and connect the owner mode to a shared database/authentication service (for example Supabase).
-- The generated hero image is in `assets/kitfo-hero.png`.
-
-## Preview locally
-
-Run a static server from this folder, for example:
+## Run locally
 
 ```powershell
 python -m http.server 4173
 ```
 
-Then open `http://localhost:4173`.
+Open `http://localhost:4173`.
+
+The menu is a lightweight static app with no build step. It includes search, category navigation, dietary filters, dish detail cards, a persistent table-side order preview, share action, and a service worker for repeat visits. Prices and dishes are sourced from the official menu PDF supplied with the project; items marked “Market price” are listed without a numeric price in that source.
