@@ -25,3 +25,26 @@ function render(){renderCategories();renderMenu();renderCart()}
 $('#searchInput').oninput=e=>{state.query=e.target.value.trim().toLowerCase();renderMenu()};$$('.filter-btn').forEach(b=>b.onclick=()=>{state.filter=state.filter===b.dataset.filter?null:b.dataset.filter;$$('.filter-btn').forEach(x=>x.classList.toggle('active',x===b&&!!state.filter));renderMenu()});$('#clearBtn').onclick=()=>{state={...state,category:'all',query:'',filter:null};$('#searchInput').value='';$$('.filter-btn').forEach(x=>x.classList.remove('active'));render()};$('#orderPill').onclick=()=>{$('#orderDrawer').classList.add('open');$('#orderDrawer').setAttribute('aria-hidden','false');$('#backdrop').classList.add('open')};$('#backdrop').onclick=closePanels;$$('[data-close]').forEach(b=>b.onclick=closePanels);$('#noteBtn').onclick=()=>toast('Show this preview to your server when ready');$('#shareBtn').onclick=async()=>{try{await navigator.share({title:'Rome 1960 Digital Menu',url:location.href})}catch{await navigator.clipboard?.writeText(location.href);toast('Menu link copied')}};function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
 render();
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+
+(() => {
+  const slides = [...document.querySelectorAll('.hero-slide')];
+  const dots = [...document.querySelectorAll('.hero-dot')];
+  const number = document.querySelector('#heroSlideNumber');
+  const label = document.querySelector('#heroSlideLabel');
+  const depth = document.querySelector('#heroDepthLabel');
+  if (!slides.length) return;
+  const labels = [['THE TABLE IS OPEN','HOUSE<br>BURGER'],['BURGER / PIZZA / QURT','THE FULL SPREAD'],['ETHIOPIAN FAVOURITE','MADE TO SHARE']];
+  let current = 0;
+  let timer;
+  function show(index){
+    current=(index+slides.length)%slides.length;
+    slides.forEach((slide,i)=>slide.classList.toggle('active',i===current));
+    dots.forEach((dot,i)=>dot.classList.toggle('active',i===current));
+    number.textContent=`0${current+1} / 03`;
+    label.textContent=labels[current][0];
+    depth.innerHTML=labels[current][1];
+  }
+  function restart(){clearInterval(timer);timer=setInterval(()=>show(current+1),5200)}
+  dots.forEach(dot=>dot.addEventListener('click',()=>{show(Number(dot.dataset.slide));restart()}));
+  show(0); restart();
+})();
