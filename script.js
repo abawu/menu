@@ -16,7 +16,7 @@ let state={category:'all',query:'',filter:null,cart:JSON.parse(localStorage.getI
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)]; const money=n=>n==null?'Market price':`${n.toLocaleString()} ETB`;
 function renderCategories(){ $('#categories').innerHTML=categories.map(([id,label])=>`<button class="${state.category===id?'active':''}" data-category="${id}">${label}</button>`).join(''); $$('#categories button').forEach(b=>b.onclick=()=>{state.category=b.dataset.category;render()}) }
 function matches(item){const text=(item.name+' '+item.description).toLowerCase();const cat=state.category==='all'||item.category===state.category||(state.category==='fast'&&item.type==='fast');return cat&&(!state.query||text.includes(state.query))&&(!state.filter||item.type===state.filter)}
-function renderMenu(){const shown=menu.filter(matches);$('#resultCount').textContent=`${shown.length} ${shown.length===1?'dish':'dishes'} on the menu`;$('#clearBtn').classList.toggle('show',!!(state.query||state.filter||state.category!=='all'));$('#menuGrid').innerHTML=shown.length?shown.map((x,i)=>`<article class="food-card" data-id="${x.id}" style="animation-delay:${Math.min(i,12)*.025}s"><div class="food-top"><span class="food-cat">${categories.find(c=>c[0]===x.category)?.[1].toUpperCase()||'SPECIAL'}</span>${x.type==='fast'?'<span class="tag fasting">FASTING</span>':x.type==='special'?'<span class="tag">SIGNATURE</span>':''}</div><h3>${x.name}</h3><p>${x.description}</p><div class="price">${money(x.price)}</div></article>`).join(''):'<p class="empty">No dishes match that search. Try another favourite.</p>';$$('.food-card').forEach(c=>c.onclick=()=>openDetail(menu.find(x=>x.id===Number(c.dataset.id))))}
+function renderMenu(){const shown=menu.filter(matches);$('#resultCount').textContent=window.romeLanguage==='en'?`${shown.length} ${shown.length===1?'dish':'dishes'} on the menu`:`${shown.length} ምግቦች በምናሌው ላይ`;$(`#clearBtn`).textContent=window.romeLanguage==='en'?'RESET':'አጽዳ';$('#clearBtn').classList.toggle('show',!!(state.query||state.filter||state.category!=='all'));$('#menuGrid').innerHTML=shown.length?shown.map((x,i)=>`<article class="food-card" data-id="${x.id}" style="animation-delay:${Math.min(i,12)*.025}s"><div class="food-top"><span class="food-cat">${categories.find(c=>c[0]===x.category)?.[1].toUpperCase()||'SPECIAL'}</span>${x.type==='fast'?'<span class="tag fasting">FASTING</span>':x.type==='special'?'<span class="tag">SIGNATURE</span>':''}</div><h3>${x.name}</h3><p>${x.description}</p><div class="price">${money(x.price)}</div></article>`).join(''):'<p class="empty">No dishes match that search. Try another favourite.</p>';$$('.food-card').forEach(c=>c.onclick=()=>openDetail(menu.find(x=>x.id===Number(c.dataset.id))))}
 function renderCart(){let items=Object.entries(state.cart).map(([id,qty])=>({item:menu.find(x=>x.id===Number(id)),qty})).filter(x=>x.item);const count=items.reduce((a,x)=>a+x.qty,0),total=items.reduce((a,x)=>a+(x.item.price||0)*x.qty,0);$('#orderSummary').textContent=`${count} ${count===1?'item':'items'} · ${total.toLocaleString()} ETB`;$('#orderTotal').textContent=`${total.toLocaleString()} ETB`;$('#orderList').innerHTML=items.length?items.map(({item,qty})=>`<div class="order-row"><div><h4>${item.name}</h4><small>${money(item.price)}</small></div><div class="stepper"><button data-minus="${item.id}">−</button><b>${qty}</b><button data-plus="${item.id}">+</button></div></div>`).join(''):'<p class="empty">Your table note is empty.<br>Tap a dish to add it here.</p>';$$('[data-plus]').forEach(b=>b.onclick=()=>changeCart(b.dataset.plus,1));$$('[data-minus]').forEach(b=>b.onclick=()=>changeCart(b.dataset.minus,-1))}
 function changeCart(id,delta){state.cart[id]=(state.cart[id]||0)+delta;if(state.cart[id]<=0)delete state.cart[id];localStorage.setItem('rome1960-cart',JSON.stringify(state.cart));renderCart()}
 function openDetail(item){state.detail=item;$('#detailCategory').innerHTML=`<i></i> ${categories.find(c=>c[0]===item.category)?.[1]||'SPECIAL'}`;$('#detailName').textContent=item.name;$('#detailDescription').textContent=item.description;$('#detailPrice').textContent=money(item.price);$('#detailModal').classList.add('open');$('#detailModal').setAttribute('aria-hidden','false');$('#detailAdd').onclick=()=>{changeCart(item.id,1);closePanels();toast(`${item.name} added to your order`)}}
@@ -33,7 +33,7 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catc
   const label = document.querySelector('#heroSlideLabel');
   const depth = document.querySelector('#heroDepthLabel');
   if (!slides.length) return;
-  const labels = [['THE TABLE IS OPEN','HOUSE<br>BURGER'],['BURGER / PIZZA / QURT','THE FULL SPREAD'],['ETHIOPIAN FAVOURITE','MADE TO SHARE']];
+  const labels = {am:[['ጠረጴዛው ተከፍቷል','የቤቱ<br>በርገር'],['በርገር / ፒዛ / ቅርጥ','ሙሉው<br>ድግስ'],['የኢትዮጵያ ተወዳጅ','ለመጋራት<br>የተዘጋጀ']],en:[['THE TABLE IS OPEN','HOUSE<br>BURGER'],['BURGER / PIZZA / QURT','THE FULL SPREAD'],['ETHIOPIAN FAVOURITE','MADE TO SHARE']]};
   let current = 0;
   let timer;
   function show(index){
@@ -41,10 +41,34 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catc
     slides.forEach((slide,i)=>slide.classList.toggle('active',i===current));
     dots.forEach((dot,i)=>dot.classList.toggle('active',i===current));
     number.textContent=`0${current+1} / 03`;
-    label.textContent=labels[current][0];
-    depth.innerHTML=labels[current][1];
+    const copy=labels[window.romeLanguage||'am'][current];
+    label.textContent=copy[0];
+    depth.innerHTML=copy[1];
   }
   function restart(){clearInterval(timer);timer=setInterval(()=>show(current+1),5200)}
   dots.forEach(dot=>dot.addEventListener('click',()=>{show(Number(dot.dataset.slide));restart()}));
   show(0); restart();
+})();
+
+/* Interface language: Amharic first, English as an optional view. Menu data stays unchanged. */
+(()=>{
+  const copy={
+    am:{brandSubtitle:'የልዩ ምግብ ቤት እና ካፌ',navMenu:'ምናሌ',navScan:'ስካን',heroKicker:'የጠረጴዛ ላይ ምናሌ / አዲስ አበባ',heroTitle:'ጣዕም በ<br><i>ደስታ።</i>',heroDescription:'ትልቅ ጣዕም፣ ተወዳጅ ምግቦች እና ቀዝቃዛ የኢትዮጵያ ቅርጥ በጠረጴዛዎ ይጠብቃሉ።',openMenu:'ምናሌውን ክፈት',menuTitle:'ዛሬ ምን ይፈልጋሉ?',filterFast:'የጾም',filterMeat:'ስጋ እና ዶሮ',filterDrinks:'መጠጦች',reset:'አጽዳ',scanLabel:'የጠረጴዛ መንገድ',scanTitle:'ስካን ያድርጉ።<br><i>ይቆዩ።</i>',scanDescription:'እያንዳንዱ ጠረጴዛ ሙሉውን ምናሌ ይይዛል። አንድ ጊዜ ስካን ያድርጉ፣ በራስዎ ፍጥነት ይምረጡ።',scanStep1:'ኮዱን ስካን ያድርጉ',scanStep2:'ተወዳጅዎን ይምረጡ',scanStep3:'ማስታወሻውን ያሳዩ',scanToOpen:'ለመክፈት ስካን ያድርጉ'},
+    en:{brandSubtitle:'SPECIALTY KITCHEN & CAFE',navMenu:'MENU',navScan:'SCAN',heroKicker:'TABLE-SIDE MENU / ADDIS ABABA',heroTitle:'Food with<br><i>volume.</i>',heroDescription:'Big flavours, fast favourites, and a cold Ethiopian qurt waiting at the table.',openMenu:'OPEN MENU',menuTitle:'WHAT’S CALLING?',filterFast:'FASTING',filterMeat:'MEAT & POULTRY',filterDrinks:'DRINKS',reset:'RESET',scanLabel:'THE TABLE ROUTE',scanTitle:'Scan in.<br><i>Stay awhile.</i>',scanDescription:'Every table can carry the whole menu. Guests scan once, browse at their pace, and choose their favourites.',scanStep1:'SCAN THE CODE',scanStep2:'CHOOSE A FAVOURITE',scanStep3:'SHOW THE NOTE',scanToOpen:'SCAN TO OPEN'}
+  };
+  window.romeLanguage='am';
+  const toggle=document.querySelector('#languageToggle');
+  function applyLanguage(lang){
+    window.romeLanguage=lang;
+    document.documentElement.lang=lang==='am'?'am':'en';
+    document.querySelectorAll('[data-i18n]').forEach(el=>{if(copy[lang][el.dataset.i18n]) el.innerHTML=copy[lang][el.dataset.i18n]});
+    document.querySelector('#searchInput').placeholder=lang==='am'?'ምናሌውን ይፈልጉ':'Search the menu';
+    document.querySelector('#languageToggle').textContent=lang==='am'?'EN':'አማ';
+    document.querySelector('#languageToggle').setAttribute('aria-label',lang==='am'?'Switch to English':'ወደ አማርኛ ቀይር');
+    document.querySelector('#heroSlideLabel').textContent=({am:['ጠረጴዛው ተከፍቷል','በርገር / ፒዛ / ቅርጥ','የኢትዮጵያ ተወዳጅ'],en:['THE TABLE IS OPEN','BURGER / PIZZA / QURT','ETHIOPIAN FAVOURITE']})[lang][Number(document.querySelector('.hero-dot.active')?.dataset.slide||0)];
+    document.querySelector('#heroDepthLabel').innerHTML=({am:['የቤቱ<br>በርገር','ሙሉው<br>ድግስ','ለመጋራት<br>የተዘጋጀ'],en:['HOUSE<br>BURGER','THE FULL<br>SPREAD','MADE TO<br>SHARE']})[lang][Number(document.querySelector('.hero-dot.active')?.dataset.slide||0)];
+    renderMenu();
+  }
+  toggle.addEventListener('click',()=>applyLanguage(window.romeLanguage==='am'?'en':'am'));
+  applyLanguage('am');
 })();

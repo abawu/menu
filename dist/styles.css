@@ -19,6 +19,8 @@
 @media(max-width:650px){.hero-dots{left:18px;bottom:18px}.hero-dot{width:20px}.hero-dot.active{width:38px}}
 @media(prefers-reduced-motion:reduce){.hero-slide.active{animation:none!important}.hero-dot{transition:none!important}}
 
+.lang-btn{background:var(--joy-gold);color:#3c2814;border:1px solid #fff4b8;padding:8px 10px;font:700 10px 'Space Grotesk',sans-serif;letter-spacing:.08em;min-width:34px;transition:.2s}.lang-btn:hover{background:var(--joy-honey);transform:translateY(-1px)}
+
 /* Joyful golden hero palette */
 :root{--joy-gold:#f4c95d;--joy-honey:#ffdf7a;--joy-cream:#fff7dc;--joy-ink:#3c2814}
 .hero{background:radial-gradient(circle at 7% 16%,#fff3b833 0 4px,transparent 5px),radial-gradient(circle at 18% 82%,#fff3b82b 0 5px,transparent 6px),radial-gradient(circle at 77% 14%,#fff3b82e 0 4px,transparent 5px),linear-gradient(135deg,#d99527 0%,#f2bd4d 42%,#ffe29a 100%);color:var(--joy-ink)}
