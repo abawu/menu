@@ -44,3 +44,4 @@
 .hero-dot.active{background:#fff8d7}
 @keyframes joySparkle{0%,100%{opacity:.42;transform:translateY(0) rotate(12deg) scale(1)}50%{opacity:1;transform:translateY(-9px) rotate(18deg) scale(1.08)}}
 @media(prefers-reduced-motion:reduce){.hero:before,.hero:after{animation:none!important}}
+.social-follow{display:flex;align-items:center;gap:13px;margin-left:auto}.social-follow>span{color:#aaa;font:700 9px 'Space Grotesk',sans-serif;letter-spacing:.14em}.social-links{display:flex;gap:8px}.social-links a{display:grid;place-items:center;width:34px;height:34px;border:1px solid #ffffff40;border-radius:50%;color:var(--yellow);transition:.2s}.social-links a:hover{background:var(--yellow);color:var(--black);transform:translateY(-2px)}.social-links svg{width:16px;height:16px;fill:currentColor}@media(max-width:650px){.social-follow{margin:24px 0 0;justify-content:space-between}.footer small{display:block;margin-top:20px}}
