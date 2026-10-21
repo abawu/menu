@@ -1,0 +1,10 @@
+{
+  "name": "Rome 1960 Digital Menu",
+  "short_name": "Rome 1960",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fbfaf7",
+  "theme_color": "#101923",
+  "description": "The official table-side menu for Rome 1960 Specialty Kitchen & Cafe.",
+  "icons": []
+}
