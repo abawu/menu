@@ -72,3 +72,4 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catc
   toggle.addEventListener('click',()=>applyLanguage(window.romeLanguage==='am'?'en':'am'));
   applyLanguage('am');
 })();
+document.querySelectorAll('.qr-card').forEach(card=>{const img=card.querySelector('img');if(img)img.alt='QR code to open https://rome1960cafe.vercel.app/';if(!card.querySelector('.qr-url')){const url=document.createElement('small');url.className='qr-url';url.textContent='rome1960cafe.vercel.app';card.querySelector('.qr-powered')?.before(url);}});
