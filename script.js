@@ -39,7 +39,7 @@ function closePanels(){$$('.open').forEach(x=>{x.classList.remove('open');if(x.h
 function render(){renderCategories();renderMenu();renderCart()}
 $('#searchInput').oninput=e=>{state.query=e.target.value.trim().toLowerCase();renderMenu()};$$('.filter-btn').forEach(b=>b.onclick=()=>{state.filter=state.filter===b.dataset.filter?null:b.dataset.filter;$$('.filter-btn').forEach(x=>x.classList.toggle('active',x===b&&!!state.filter));renderMenu()});$('#clearBtn').onclick=()=>{state={...state,category:'all',query:'',filter:null};$('#searchInput').value='';$$('.filter-btn').forEach(x=>x.classList.remove('active'));render()};$('#orderPill').onclick=()=>{$('#orderDrawer').classList.add('open');$('#orderDrawer').setAttribute('aria-hidden','false');$('#backdrop').classList.add('open')};$('#backdrop').onclick=closePanels;$$('[data-close]').forEach(b=>b.onclick=closePanels);$('#noteBtn').onclick=()=>toast('Show this preview to your server when ready');$('#shareBtn').onclick=async()=>{try{await navigator.share({title:'Rome 1960 Digital Menu',url:location.href})}catch{await navigator.clipboard?.writeText(location.href);toast('Menu link copied')}};function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
 render();
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js?v=ba35406').catch(() => {});
 
 (() => {
   const slides = [...document.querySelectorAll('.hero-slide')];
