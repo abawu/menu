@@ -87,6 +87,23 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catc
     toggle.setAttribute('aria-label',{am:'Switch to English',en:'Switch to Chinese',zh:'ወደ አማርኛ ቀይር'}[lang]);
     if(lang==='zh'){document.querySelector('#searchInput').placeholder='搜索菜单';const slide=Number(document.querySelector('.hero-dot.active')?.dataset.slide||0);document.querySelector('#heroSlideLabel').textContent=labels.zh[slide][0];document.querySelector('#heroDepthLabel').innerHTML=labels.zh[slide][1]}
   }
+  const applyLanguageBase=applyLanguage;
+  applyLanguage=function(lang){
+    if(lang==='zh'){
+      applyLanguageBase('en');
+      window.romeLanguage='zh';
+      document.documentElement.lang='zh';
+      document.querySelectorAll('[data-i18n]').forEach(el=>{if(copy.zh[el.dataset.i18n]) el.innerHTML=copy.zh[el.dataset.i18n]});
+      document.querySelector('#searchInput').placeholder='搜索菜单';
+      toggle.textContent='አማ';
+      toggle.setAttribute('aria-label','ወደ አማርኛ ቀይር');
+      document.querySelector('#heroSlideLabel').textContent=['餐桌已准备好','汉堡 / 披萨 / 酸奶','埃塞俄比亚风味'][Number(document.querySelector('.hero-dot.active')?.dataset.slide||0)];
+      document.querySelector('#heroDepthLabel').innerHTML=['招牌<br>汉堡','丰盛全餐','适合分享'][Number(document.querySelector('.hero-dot.active')?.dataset.slide||0)];
+      renderMenu();
+      return;
+    }
+    applyLanguageBase(lang);
+  };
   toggle.addEventListener('click',()=>applyLanguage({am:'en',en:'zh',zh:'am'}[window.romeLanguage]));
   applyLanguage('am');
 })();
