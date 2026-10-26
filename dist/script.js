@@ -43,33 +43,9 @@ function render(){renderCategories();renderMenu();renderCart()}
 $('#searchInput').oninput=e=>{state.query=e.target.value.trim().toLowerCase();renderMenu()};$$('.filter-btn').forEach(b=>b.onclick=()=>{state.filter=state.filter===b.dataset.filter?null:b.dataset.filter;$$('.filter-btn').forEach(x=>x.classList.toggle('active',x===b&&!!state.filter));renderMenu()});$('#clearBtn').onclick=()=>{state={...state,category:'all',query:'',filter:null};$('#searchInput').value='';$$('.filter-btn').forEach(x=>x.classList.remove('active'));render()};$('#orderPill').onclick=()=>{$('#orderDrawer').classList.add('open');$('#orderDrawer').setAttribute('aria-hidden','false');$('#backdrop').classList.add('open')};$('#backdrop').onclick=closePanels;$$('[data-close]').forEach(b=>b.onclick=closePanels);$('#noteBtn').onclick=()=>toast('Show this preview to your server when ready');$('#shareBtn').onclick=async()=>{try{await navigator.share({title:'Rome 1960 Digital Menu',url:location.href})}catch{await navigator.clipboard?.writeText(location.href);toast('Menu link copied')}};function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
 render();
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js?v=ba35406').catch(() => {});
-const shawarmaHeroVideo=document.createElement('video');shawarmaHeroVideo.className='hero-slide';shawarmaHeroVideo.src='assets/rome1960-shawarma-homepage.mp4';shawarmaHeroVideo.muted=true;shawarmaHeroVideo.autoplay=true;shawarmaHeroVideo.loop=true;shawarmaHeroVideo.playsInline=true;shawarmaHeroVideo.setAttribute('muted','');shawarmaHeroVideo.setAttribute('playsinline','');shawarmaHeroVideo.setAttribute('aria-label','Rome 1960 shawarma video');document.querySelector('.hero-slides')?.appendChild(shawarmaHeroVideo);const shawarmaHeroDot=document.createElement('button');shawarmaHeroDot.className='hero-dot';shawarmaHeroDot.dataset.slide='3';shawarmaHeroDot.setAttribute('aria-label','Show shawarma video');document.querySelector('.hero-dots')?.appendChild(shawarmaHeroDot);
 
 (() => {
-  const slides = [...document.querySelectorAll('.hero-slide')];
-  const dots = [...document.querySelectorAll('.hero-dot')];
-  const number = document.querySelector('#heroSlideNumber');
-  const label = document.querySelector('#heroSlideLabel');
-  const depth = document.querySelector('#heroDepthLabel');
-  if (!slides.length) return;
-  const labels = {am:[['ጠረጴዛው ተከፍቷል','የቤቱ<br>በርገር'],['በርገር / ፒዛ / ቅርጥ','ሙሉው<br>ድግስ'],['የኢትዮጵያ ተወዳጅ','ለመጋራት<br>የተዘጋጀ']],en:[['THE TABLE IS OPEN','HOUSE<br>BURGER'],['BURGER / PIZZA / QURT','THE FULL SPREAD'],['ETHIOPIAN FAVOURITE','MADE TO SHARE']]};
-  labels.zh=[['餐桌已准备好','招牌<br>汉堡'],['汉堡 / 披萨 / 酸奶','丰盛全餐'],['埃塞俄比亚风味','适合分享']];
-  let current = 0;
-  labels.am[3]=['ROME SHAWARMA','HOT<br>SHAWARMA'];labels.en[3]=['ROME SHAWARMA','HOT<br>SHAWARMA'];labels.zh[3]=['招牌沙威玛','热辣<br>沙威玛'];
-  let timer;
-  function show(index){
-    current=(index+slides.length)%slides.length;
-    slides.forEach((slide,i)=>slide.classList.toggle('active',i===current));
-    slides.forEach((slide,i)=>{if(slide.tagName==='VIDEO'){if(i===current)slide.play().catch(()=>{});else{slide.pause();slide.currentTime=0}}});
-    dots.forEach((dot,i)=>dot.classList.toggle('active',i===current));
-    number.textContent=`0${current+1} / 04`;
-    const copy=labels[window.romeLanguage||'am'][current];
-    label.textContent=copy[0];
-    depth.innerHTML=copy[1];
-  }
-  function restart(){clearInterval(timer);timer=setInterval(()=>show(current+1),5200)}
-  dots.forEach(dot=>dot.addEventListener('click',()=>{show(Number(dot.dataset.slide));restart()}));
-  show(0); restart();
+  document.querySelector('.hero-slide')?.play().catch(()=>{});
 })();
 
 /* Interface language: Amharic first, English as an optional view. Menu data stays unchanged. */
@@ -88,12 +64,12 @@ const shawarmaHeroVideo=document.createElement('video');shawarmaHeroVideo.classN
     document.querySelector('#searchInput').placeholder=lang==='am'?'ምናሌውን ይፈልጉ':'Search the menu';
     document.querySelector('#languageToggle').textContent=lang==='am'?'EN':'አማ';
     document.querySelector('#languageToggle').setAttribute('aria-label',lang==='am'?'Switch to English':'ወደ አማርኛ ቀይር');
-    document.querySelector('#heroSlideLabel').textContent=({am:['ጠረጴዛው ተከፍቷል','በርገር / ፒዛ / ቅርጥ','የኢትዮጵያ ተወዳጅ'],en:['THE TABLE IS OPEN','BURGER / PIZZA / QURT','ETHIOPIAN FAVOURITE']})[lang][Number(document.querySelector('.hero-dot.active')?.dataset.slide||0)];
-    document.querySelector('#heroDepthLabel').innerHTML=({am:['የቤቱ<br>በርገር','ሙሉው<br>ድግስ','ለመጋራት<br>የተዘጋጀ'],en:['HOUSE<br>BURGER','THE FULL<br>SPREAD','MADE TO<br>SHARE']})[lang][Number(document.querySelector('.hero-dot.active')?.dataset.slide||0)];
+    document.querySelector('#heroSlideLabel').textContent=({am:'የሮም ሻዋርማ',en:'ROME SHAWARMA'})[lang];
+    document.querySelector('#heroDepthLabel').innerHTML=({am:'ትኩስ<br>ሻዋርማ',en:'HOT<br>SHAWARMA'})[lang];
     renderMenu();
     toggle.textContent={am:'EN',en:'中文',zh:'አማ'}[lang];
     toggle.setAttribute('aria-label',{am:'Switch to English',en:'Switch to Chinese',zh:'ወደ አማርኛ ቀይር'}[lang]);
-    if(lang==='zh'){document.querySelector('#searchInput').placeholder='搜索菜单';const slide=Number(document.querySelector('.hero-dot.active')?.dataset.slide||0);document.querySelector('#heroSlideLabel').textContent=labels.zh[slide][0];document.querySelector('#heroDepthLabel').innerHTML=labels.zh[slide][1]}
+    if(lang==='zh'){document.querySelector('#searchInput').placeholder='搜索菜单';document.querySelector('#heroSlideLabel').textContent='招牌沙威玛';document.querySelector('#heroDepthLabel').innerHTML='热辣<br>沙威玛'}
   }
   const applyLanguageBase=applyLanguage;
   applyLanguage=function(lang){
@@ -105,8 +81,8 @@ const shawarmaHeroVideo=document.createElement('video');shawarmaHeroVideo.classN
       document.querySelector('#searchInput').placeholder='搜索菜单';
       toggle.textContent='አማ';
       toggle.setAttribute('aria-label','ወደ አማርኛ ቀይር');
-      document.querySelector('#heroSlideLabel').textContent=['餐桌已准备好','汉堡 / 披萨 / 酸奶','埃塞俄比亚风味'][Number(document.querySelector('.hero-dot.active')?.dataset.slide||0)];
-      document.querySelector('#heroDepthLabel').innerHTML=['招牌<br>汉堡','丰盛全餐','适合分享'][Number(document.querySelector('.hero-dot.active')?.dataset.slide||0)];
+      document.querySelector('#heroSlideLabel').textContent='招牌沙威玛';
+      document.querySelector('#heroDepthLabel').innerHTML='热辣<br>沙威玛';
       renderMenu();
       return;
     }
