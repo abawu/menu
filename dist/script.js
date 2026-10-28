@@ -32,7 +32,7 @@ menu.forEach((item,index)=>item.id=index+1);
 const categories=[['all','All'],['sizzling','Sizzling'],['noodles','Noodle'],['soups','Soup'],['burgers','Burgers'],['pizza','Pizza'],['shawarma','Shawarma'],['clubs','Club'],['burritos','Burrito'],['rolls','Roll'],['chechebsa','Chechebsa'],['fries','French Fries'],['rice','Rice dishes'],['salads','Salads'],['breakfast','Breakfast'],['fetira','Fetira'],['chicken','Chicken'],['fast','Fasting specials'],['hotdrinks','Hot Drinks'],['mojitos','Mojitos'],['cocktails','Cocktails']];
 let state={category:'all',query:'',filter:null,cart:JSON.parse(localStorage.getItem('rome1960-cart')||'{}'),detail:null};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)]; const money=n=>n==null?'Market price':`${n.toLocaleString()} ETB`;
-function renderCategories(){ $('#categories').innerHTML=categories.map(([id,label])=>`<button class="${state.category===id?'active':''}" data-category="${id}">${label}</button>`).join(''); $$('#categories button').forEach(b=>b.onclick=()=>{state.category=b.dataset.category;render()}) }
+function renderCategories(){const available=new Set(menu.map(item=>item.category));$('#categories').innerHTML=categories.filter(([id])=>id==='all'||available.has(id)).map(([id,label])=>`<button class="${state.category===id?'active':''}" data-category="${id}">${label}</button>`).join('');$$('#categories button').forEach(b=>b.onclick=()=>{state.category=b.dataset.category;render()})}
 function matches(item){const text=(item.name+' '+item.description).toLowerCase();const cat=state.category==='all'||item.category===state.category||(state.category==='fast'&&item.type==='fast');return cat&&(!state.query||text.includes(state.query))&&(!state.filter||item.type===state.filter)}
 function renderMenu(){const shown=menu.filter(matches);$('#resultCount').textContent=window.romeLanguage==='en'?`${shown.length} ${shown.length===1?'dish':'dishes'} on the menu`:`${shown.length} ምግቦች በምናሌው ላይ`;$(`#clearBtn`).textContent=window.romeLanguage==='en'?'RESET':'አጽዳ';$('#clearBtn').classList.toggle('show',!!(state.query||state.filter||state.category!=='all'));$('#menuGrid').innerHTML=shown.length?shown.map((x,i)=>`<article class="food-card" data-id="${x.id}" style="animation-delay:${Math.min(i,12)*.025}s"><div class="food-top"><span class="food-cat">${categories.find(c=>c[0]===x.category)?.[1].toUpperCase()||'SPECIAL'}</span>${x.type==='fast'?'<span class="tag fasting">FASTING</span>':x.type==='special'?'<span class="tag">SIGNATURE</span>':''}</div><h3>${x.name}</h3><p>${x.description}</p><div class="price">${money(x.price)}</div></article>`).join(''):'<p class="empty">No dishes match that search. Try another favourite.</p>';$$('.food-card').forEach(c=>c.onclick=()=>openDetail(menu.find(x=>x.id===Number(c.dataset.id))))}
 function renderCart(){let items=Object.entries(state.cart).map(([id,qty])=>({item:menu.find(x=>x.id===Number(id)),qty})).filter(x=>x.item);const count=items.reduce((a,x)=>a+x.qty,0),total=items.reduce((a,x)=>a+(x.item.price||0)*x.qty,0);$('#orderSummary').textContent=`${count} ${count===1?'item':'items'} · ${total.toLocaleString()} ETB`;$('#orderTotal').textContent=`${total.toLocaleString()} ETB`;$('#orderList').innerHTML=items.length?items.map(({item,qty})=>`<div class="order-row"><div><h4>${item.name}</h4><small>${money(item.price)}</small></div><div class="stepper"><button data-minus="${item.id}">−</button><b>${qty}</b><button data-plus="${item.id}">+</button></div></div>`).join(''):'<p class="empty">Your table note is empty.<br>Tap a dish to add it here.</p>';$$('[data-plus]').forEach(b=>b.onclick=()=>changeCart(b.dataset.plus,1));$$('[data-minus]').forEach(b=>b.onclick=()=>changeCart(b.dataset.minus,-1))}
@@ -41,11 +41,17 @@ function openDetail(item){state.detail=item;$('#detailCategory').innerHTML=`<i><
 function closePanels(){$$('.open').forEach(x=>{x.classList.remove('open');if(x.hasAttribute('aria-hidden'))x.setAttribute('aria-hidden','true')});$('#backdrop').classList.remove('open')}
 function render(){renderCategories();renderMenu();renderCart()}
 $('#searchInput').oninput=e=>{state.query=e.target.value.trim().toLowerCase();renderMenu()};$$('.filter-btn').forEach(b=>b.onclick=()=>{state.filter=state.filter===b.dataset.filter?null:b.dataset.filter;$$('.filter-btn').forEach(x=>x.classList.toggle('active',x===b&&!!state.filter));renderMenu()});$('#clearBtn').onclick=()=>{state={...state,category:'all',query:'',filter:null};$('#searchInput').value='';$$('.filter-btn').forEach(x=>x.classList.remove('active'));render()};$('#orderPill').onclick=()=>{$('#orderDrawer').classList.add('open');$('#orderDrawer').setAttribute('aria-hidden','false');$('#backdrop').classList.add('open')};$('#backdrop').onclick=closePanels;$$('[data-close]').forEach(b=>b.onclick=closePanels);$('#noteBtn').onclick=()=>toast('Show this preview to your server when ready');$('#shareBtn').onclick=async()=>{try{await navigator.share({title:'Rome 1960 Digital Menu',url:location.href})}catch{await navigator.clipboard?.writeText(location.href);toast('Menu link copied')}};function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+menu.splice(0,menu.length,...menu.filter(item=>!['Scrambled Egg','Egg Rice'].includes(item.name)));
+menu.forEach((item,index)=>item.id=index+1);
+menu.sort((a,b)=>(b.type==='special')-(a.type==='special'));
 render();
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js?v=ba35406').catch(() => {});
 
 (() => {
-  document.querySelector('.hero-slide')?.play().catch(()=>{});
+  const heroSlide = document.querySelector('.hero-slide');
+  if (heroSlide && typeof heroSlide.play === 'function') {
+    heroSlide.play().catch(()=>{});
+  }
 })();
 
 /* Interface language: Amharic first, English as an optional view. Menu data stays unchanged. */
@@ -54,41 +60,7 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js?v=ba35
     am:{brandSubtitle:'የልዩ ምግብ ቤት እና ካፌ',navMenu:'ምናሌ',navScan:'ስካን',heroKicker:'የጠረጴዛ ላይ ምናሌ / ሐዋሳ',followUs:'በእነዚህ ላይ ይከተሉን',heroTitle:'ጣዕም በ<br><i>ደስታ።</i>',heroDescription:'የሚወዱት ምግብ፣ የሚያስደስት ጣዕም እዚህ ይጠብቁዎታል።',openMenu:'ምናሌውን ክፈት',menuTitle:'ዛሬ ምን ይፈልጋሉ?',filterFast:'የጾም',filterMeat:'ስጋ እና ዶሮ',filterDrinks:'መጠጦች',reset:'አጽዳ',scanLabel:'የጠረጴዛ መንገድ',scanTitle:'ስካን ያድርጉ።<br><i>ይቆዩ።</i>',scanDescription:'እያንዳንዱ ጠረጴዛ ሙሉውን ምናሌ ይይዛል። አንድ ጊዜ ስካን ያድርጉ፣ በራስዎ ፍጥነት ይምረጡ።',scanStep1:'ኮዱን ስካን ያድርጉ',scanStep2:'ተወዳጅዎን ይምረጡ',scanStep3:'ማስታወሻውን ያሳዩ',scanToOpen:'ለመክፈት ስካን ያድርጉ'},
     en:{brandSubtitle:'SPECIALTY KITCHEN & CAFE',navMenu:'MENU',navScan:'SCAN',heroKicker:'TABLE-SIDE MENU / HAWASA',followUs:'FOLLOW US ON',heroTitle:'Food with<br><i>volume.</i>',heroDescription:'Big flavours, fast favourites, and a cold Ethiopian qurt waiting at the table.',openMenu:'OPEN MENU',menuTitle:'WHAT’S CALLING?',filterFast:'FASTING',filterMeat:'MEAT & POULTRY',filterDrinks:'DRINKS',reset:'RESET',scanLabel:'THE TABLE ROUTE',scanTitle:'Scan in.<br><i>Stay awhile.</i>',scanDescription:'Every table can carry the whole menu. Guests scan once, browse at their pace, and choose their favourites.',scanStep1:'SCAN THE CODE',scanStep2:'CHOOSE A FAVOURITE',scanStep3:'SHOW THE NOTE',scanToOpen:'SCAN TO OPEN'}
   };
-  copy.zh={brandSubtitle:'特色厨房与咖啡馆',navMenu:'菜单',navScan:'扫描',heroKicker:'桌边菜单 / 哈瓦萨',followUs:'关注我们',heroTitle:'美味<br><i>尽在此刻。</i>',heroDescription:'浓郁风味、经典美食，以及冰爽的埃塞俄比亚酸奶饮品，正在餐桌等候。',openMenu:'打开菜单',menuTitle:'今天想吃什么？',filterFast:'素食',filterMeat:'肉类与鸡肉',filterDrinks:'饮品',reset:'重置',scanLabel:'餐桌路线',scanTitle:'扫码进入。<br><i>慢慢享用。</i>',scanDescription:'每张餐桌都可以查看完整菜单。扫码一次，按自己的节奏浏览并选择喜爱的美食。',scanStep1:'扫描二维码',scanStep2:'选择喜爱美食',scanStep3:'向服务员出示备注',scanToOpen:'扫码打开'};
-  window.romeLanguage='am';
-  const toggle=document.querySelector('#languageToggle');
-  function applyLanguage(lang){
-    window.romeLanguage=lang;
-    document.documentElement.lang=lang==='am'?'am':'en';
-    document.querySelectorAll('[data-i18n]').forEach(el=>{if(copy[lang][el.dataset.i18n]) el.innerHTML=copy[lang][el.dataset.i18n]});
-    document.querySelector('#searchInput').placeholder=lang==='am'?'ምናሌውን ይፈልጉ':'Search the menu';
-    document.querySelector('#languageToggle').textContent=lang==='am'?'EN':'አማ';
-    document.querySelector('#languageToggle').setAttribute('aria-label',lang==='am'?'Switch to English':'ወደ አማርኛ ቀይር');
-    document.querySelector('#heroSlideLabel').textContent=({am:'የሮም ሻዋርማ',en:'ROME SHAWARMA'})[lang];
-    document.querySelector('#heroDepthLabel').innerHTML=({am:'ትኩስ<br>ሻዋርማ',en:'HOT<br>SHAWARMA'})[lang];
-    renderMenu();
-    toggle.textContent={am:'EN',en:'中文',zh:'አማ'}[lang];
-    toggle.setAttribute('aria-label',{am:'Switch to English',en:'Switch to Chinese',zh:'ወደ አማርኛ ቀይር'}[lang]);
-    if(lang==='zh'){document.querySelector('#searchInput').placeholder='搜索菜单';document.querySelector('#heroSlideLabel').textContent='招牌沙威玛';document.querySelector('#heroDepthLabel').innerHTML='热辣<br>沙威玛'}
-  }
-  const applyLanguageBase=applyLanguage;
-  applyLanguage=function(lang){
-    if(lang==='zh'){
-      applyLanguageBase('en');
-      window.romeLanguage='zh';
-      document.documentElement.lang='zh';
-      document.querySelectorAll('[data-i18n]').forEach(el=>{if(copy.zh[el.dataset.i18n]) el.innerHTML=copy.zh[el.dataset.i18n]});
-      document.querySelector('#searchInput').placeholder='搜索菜单';
-      toggle.textContent='አማ';
-      toggle.setAttribute('aria-label','ወደ አማርኛ ቀይር');
-      document.querySelector('#heroSlideLabel').textContent='招牌沙威玛';
-      document.querySelector('#heroDepthLabel').innerHTML='热辣<br>沙威玛';
-      renderMenu();
-      return;
-    }
-    applyLanguageBase(lang);
-  };
-  toggle.addEventListener('click',()=>applyLanguage({am:'en',en:'zh',zh:'am'}[window.romeLanguage]));
-  applyLanguage('am');
 })();
 document.querySelectorAll('.qr-card').forEach(card=>{const img=card.querySelector('img');if(img)img.alt='QR code to open https://rome1960cafe.vercel.app/';if(!card.querySelector('.qr-url')){const url=document.createElement('small');url.className='qr-url';url.textContent='rome1960cafe.vercel.app';card.querySelector('.qr-powered')?.before(url);}});
+(()=>{const nav=document.querySelector('.top-nav'),share=document.querySelector('#shareBtn');if(!nav||!share)return;const toggle=document.createElement('button');toggle.className='lang-btn';toggle.id='languageToggle';toggle.type='button';nav.insertBefore(toggle,share);const copy={am:{brandSubtitle:'የልዩ ምግብ ቤት እና ካፌ',navMenu:'ምናሌ',navScan:'ስካን',heroKicker:'የጠረጴዛ ላይ ምናሌ / ሐዋሳ',followUs:'በእነዚህ ላይ ይከተሉን',heroTitle:'ጣዕም በ<br><i>ደስታ።</i>',heroDescription:'የሚወዱት ምግብ፣ የሚያስደስት ጣዕም እዚህ ይጠብቁዎታል።',openMenu:'ምናሌውን ክፈት',menuTitle:'ዛሬ ምን ይፈልጋሉ?',filterFast:'የጾም',filterMeat:'ስጋ እና ዶሮ',filterDrinks:'መጠጦች',reset:'አጽዳ',scanLabel:'የጠረጴዛ መንገድ',scanTitle:'ስካን ያድርጉ።<br><i>ይቆዩ።</i>',scanDescription:'እያንዳንዱ ጠረጴዛ ሙሉውን ምናሌ ይይዛል። አንድ ጊዜ ስካን ያድርጉ፣ በራስዎ ፍጥነት ይምረጡ።',scanStep1:'ኮዱን ስካን ያድርጉ',scanStep2:'ተወዳጅዎን ይምረጡ',scanStep3:'ማስታወሻውን ያሳዩ',scanToOpen:'ለመክፈት ስካን ያድርጉ'},en:{brandSubtitle:'SPECIALTY KITCHEN & CAFE',navMenu:'MENU',navScan:'SCAN',heroKicker:'TABLE-SIDE MENU / HAWASA',followUs:'FOLLOW US ON',heroTitle:'Food with<br><i>volume.</i>',heroDescription:'Big flavours, fast favourites, and a cold Ethiopian qurt waiting at the table.',openMenu:'OPEN MENU',menuTitle:'WHAT’S CALLING?',filterFast:'FASTING',filterMeat:'MEAT & POULTRY',filterDrinks:'DRINKS',reset:'RESET',scanLabel:'THE TABLE ROUTE',scanTitle:'Scan in.<br><i>Stay awhile.</i>',scanDescription:'Every table can carry the whole menu. Guests scan once, browse at their pace, and choose their favourites.',scanStep1:'SCAN THE CODE',scanStep2:'CHOOSE A FAVOURITE',scanStep3:'SHOW THE NOTE',scanToOpen:'SCAN TO OPEN'},zh:{brandSubtitle:'特色厨房与咖啡馆',navMenu:'菜单',navScan:'扫描',heroKicker:'桌边菜单 / 哈瓦萨',followUs:'关注我们',heroTitle:'美味<br><i>尽在此刻。</i>',heroDescription:'浓郁风味、经典美食，以及冰爽的埃塞俄比亚酸奶饮品，正在餐桌等候。',openMenu:'打开菜单',menuTitle:'今天想吃什么？',filterFast:'素食',filterMeat:'肉类与鸡肉',filterDrinks:'饮品',reset:'重置',scanLabel:'餐桌路线',scanTitle:'扫码进入。<br><i>慢慢享用。</i>',scanDescription:'每张餐桌都可以查看完整菜单。扫码一次，按自己的节奏浏览并选择喜爱的美食。',scanStep1:'扫描二维码',scanStep2:'选择喜爱美食',scanStep3:'向服务员出示备注',scanToOpen:'扫码打开'}};let lang='am';function apply(next){lang=next;window.romeLanguage=lang;document.documentElement.lang=lang;document.querySelectorAll('[data-i18n]').forEach(el=>{if(copy[lang][el.dataset.i18n])el.innerHTML=copy[lang][el.dataset.i18n]});document.querySelector('#searchInput').placeholder=lang==='am'?'ምናሌውን ይፈልጉ':lang==='zh'?'搜索菜单':'Search the menu';toggle.textContent={am:'EN',en:'中文',zh:'አማ'}[lang];toggle.setAttribute('aria-label',{am:'Switch to English',en:'Switch to Chinese',zh:'ወደ አማርኛ ቀይር'}[lang]);document.querySelector('#heroSlideLabel').textContent={am:'የሮም ሻዋርማ',en:'ROME SHAWARMA',zh:'招牌沙威玛'}[lang];document.querySelector('#heroDepthLabel').innerHTML={am:'ትኩስ<br>ሻዋርማ',en:'HOT<br>SHAWARMA',zh:'热辣<br>沙威玛'}[lang];renderMenu()}toggle.addEventListener('click',()=>apply({am:'en',en:'zh',zh:'am'}[lang]));apply('am')})();
+document.querySelector('.filters')?.remove();
