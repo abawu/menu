@@ -48,3 +48,8 @@
  .qr-card .qr-url{color:var(--yellow);font:700 8px 'Space Grotesk',sans-serif;letter-spacing:.08em;margin-top:8px;overflow-wrap:anywhere}
 .hero-copy:before{content:'ROME 1960';display:block;color:var(--yellow);font:700 12px 'Space Grotesk',sans-serif;letter-spacing:.22em;margin-bottom:18px}.footer p{font-size:0}.footer p:before{content:'Quality is our Identity!';font:italic 18px 'Space Grotesk',sans-serif;letter-spacing:.02em;color:var(--yellow)}
 .hero-copy:after{content:'QUALITY IS OUR IDENTITY!';display:inline-block;margin-top:28px;padding:10px 14px;border-left:4px solid var(--red);color:var(--yellow);font:700 11px 'Space Grotesk',sans-serif;letter-spacing:.14em;text-transform:uppercase;box-shadow:8px 8px 0 #e2473233}
+.category-bar button{display:inline-flex;align-items:center;gap:8px}.category-bar button img{width:30px;height:30px;object-fit:cover;border-radius:50%;flex:0 0 30px}.category-bar button span{display:inline-block}
+.category-bar button img{width:48px;height:48px;border-radius:10px}.category-bar button{padding:8px 12px;min-height:66px}
+@media(max-width:650px){.category-bar button img{width:42px;height:42px}.category-bar button{min-height:58px;padding:7px 10px}}
+.category-bar button img{width:76px;height:76px;border-radius:14px}.category-bar button{min-height:100px;padding:10px 14px;gap:10px;font-size:11px}
+@media(max-width:650px){.category-bar button img{width:64px;height:64px}.category-bar button{min-height:86px;padding:8px 12px}}
