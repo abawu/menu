@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1200" height="1500" viewBox="0 0 1200 1500" role="img" aria-labelledby="title desc">
+  <title id="title">Rome 1960 digital menu QR sign</title>
+  <desc id="desc">Scan to open the Rome 1960 digital menu at rome1960cafe.vercel.app</desc>
+  <rect width="1200" height="1500" fill="#f1eee7"/>
+  <rect x="34" y="34" width="1132" height="1432" rx="8" fill="none" stroke="#111" stroke-width="8"/>
+  <rect x="58" y="58" width="1084" height="1384" rx="4" fill="none" stroke="#e24732" stroke-width="3"/>
+  <circle cx="600" cy="170" r="58" fill="#111"/>
+  <text x="600" y="182" text-anchor="middle" fill="#e9b74d" font-family="Arial, sans-serif" font-size="48" font-weight="700">R</text>
+  <text x="600" y="310" text-anchor="middle" fill="#111" font-family="Arial, sans-serif" font-size="58" font-weight="700" letter-spacing="10">ROME 1960</text>
+  <text x="600" y="370" text-anchor="middle" fill="#e24732" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="7">DIGITAL MENU</text>
+  <rect x="150" y="430" width="900" height="900" fill="#fff" stroke="#111" stroke-width="10"/>
+  <image x="175" y="455" width="850" height="850" preserveAspectRatio="none" xlink:href="qr-code.svg" href="qr-code.svg"/>
+  <text x="600" y="1380" text-anchor="middle" fill="#111" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="3">SCAN TO OPEN THE MENU</text>
+  <text x="600" y="1420" text-anchor="middle" fill="#e24732" font-family="Arial, sans-serif" font-size="22" font-weight="700">rome1960cafe.vercel.app</text>
+</svg>
