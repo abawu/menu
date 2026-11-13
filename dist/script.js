@@ -32,6 +32,8 @@ menu.push({category:'softdrinks',name:'Coca-Cola',price:100,description:'Chilled
 menu.forEach(item=>{if(item.category==='noodles'&&/Soup$/i.test(item.name))item.category='soups'});
 menu.splice(0,menu.length,...menu.filter(item=>!(item.category==='soups'&&/Noodles Soup$/i.test(item.name))));
 menu.forEach((item,index)=>item.id=index+1);
+const updatedPrices={'Special Shawarma':800,'Chicken Shawarma':750,'Beef Shawarma':700,'Fasting Shawarma':350,'Special Burrito':950,'Chicken Burrito':900,'Beef Burrito':850};
+menu.forEach(item=>{if(Object.prototype.hasOwnProperty.call(updatedPrices,item.name))item.price=updatedPrices[item.name]});
 const fastingNames=new Set(['Veg Noodles','Veg Soup','Fish Soup','Fasting Burger','Fasting Shawarma','Normal Salad','Veg Rice','Normal French Fries','Normal Chechebsa','Veg Roll','Fish Roll','Veg Fajita','Veg Pizza','Fasting Special Pizza']);
 const categories=[['all','All'],['sizzling','Sizzling'],['noodles','Noodle'],['soups','Soup'],['chicken','Chicken'],['salads','Salads'],['rice','Rice dishes'],['burgers','Burgers'],['pizza','Pizza'],['shawarma','Shawarma'],['clubs','Club'],['burritos','Burrito'],['rolls','Roll'],['fasting','Fasting'],['chechebsa','Chechebsa'],['fries','French Fries'],['breakfast','Breakfast'],['fetira','Fetira'],['hotdrinks','Hot Drinks'],['mojitos','Mojitos'],['cocktails','Cocktails'],['softdrinks','Soft Drinks']];
 let state={category:'all',query:'',filter:null,cart:JSON.parse(localStorage.getItem('rome1960-cart')||'{}'),detail:null};
